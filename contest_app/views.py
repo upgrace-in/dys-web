@@ -30,7 +30,7 @@ scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/au
 path = os.path.abspath('.')
 credentials = ServiceAccountCredentials.from_json_keyfile_name(
     path+'/static/creds.json', scope)
-    
+
 live = "rzp_live_LykfrqrRQz1DIi"
 secret = "sRobucivMXuz4rxuia3KzIXX"
 test = "rzp_test_IyvQ5bI5rXkMyT"
@@ -64,6 +64,7 @@ def sheet_updation(hash, name, age, mail_id, phone_num, occupation, qualificatio
     client = gspread.authorize(credentials)
     sheet = client.open("online").sheet1
     sheet.append_row([hash, name, age, mail_id, phone_num, occupation, qualification, order_id])
+    print("Sheet Updated")
 
 @csrf_exempt
 def verify_payment(request):
