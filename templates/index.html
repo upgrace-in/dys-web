@@ -453,7 +453,8 @@
                                 class="form-control">
                         </div>
                         <div class="mb-3">
-                            <input required type="number" id="age" required placeholder="Age" class="form-control">
+                            <input required type="number" id="age" required placeholder="Age"
+                                class="form-control">
                         </div>
                         <div class="mb-3">
                             <input required type="text" id="qualifications" required
@@ -461,7 +462,7 @@
                         </div>
                         <div class="mb-3">
                             <select required id="occupation" class="form-select" name="" id="">
-                                <option value="" selected>Occupation</option>
+                                <option value="occu" selected>Occupation</option>
                                 <option value="student">Student</option>
                                 <option value="working">Working</option>
                             </select>
@@ -1000,12 +1001,12 @@
     var check_for_selected = 0;
     var csrf = $('input[name=csrfmiddlewaretoken]').val();
     function create_order() {
-        if (($('#name').val() == "") &&
-            ($('#mail').val() == "") &&
-            ($('#num').val() == "") &&
-            ($('#age').val() == "") &&
-            ($('#qualifications').val() == "") &&
-            ($('#occupation').val() == "")) {
+        if (($('#name').val() == "") ||
+            ($('#mail').val() == "") ||
+            ($('#num').val() == "") ||
+            ($('#age').val() == "") ||
+            ($('#qualifications').val() == "") ||
+            ($('#occupation').val() == "occu")) {
             alert("Fill the required fields to proceed")
         }
         else {
@@ -1030,6 +1031,11 @@
                         "handler": function (response) {
                             proceed_form(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature)
                         },
+                        "modal": {
+                            "ondismiss": function () {
+                                location.reload();
+                            }
+                        }
                     };
                     var rzp1 = new Razorpay(options);
                     rzp1.open();
