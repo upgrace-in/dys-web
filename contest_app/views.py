@@ -74,7 +74,7 @@ def verify_payment(request):
         razorpay_signature = request.POST['razorpay_signature']
 
         client = razorpay.Client(
-            auth=(test, test_secret))
+            auth=(live, secret))
         params_dict = {
             'razorpay_order_id': razorpay_order_id,
             'razorpay_payment_id': razorpay_payment_id,
@@ -117,7 +117,7 @@ def create_an_order(request):
     if request.method == 'POST':
         fees = 50
         client = razorpay.Client(
-            auth=(test, test_secret))
+            auth=(live, secret))
         order_currency = 'INR'
         order_receipt = 'ord_rcpt'+str(random.randint(0, 100000))
         c = client.order.create(dict(amount=int(str(fees)+"00"),
