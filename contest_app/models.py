@@ -12,6 +12,7 @@ class users_data(models.Model):
     phone_num = models.CharField(max_length=100)
     occupation = models.CharField(max_length=100)
     qualification = models.CharField(max_length=100)
+    lang = models.CharField(max_length=100)
 
     razorpay_order_id = models.CharField(max_length=1000, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=1000, blank=True, null=True)

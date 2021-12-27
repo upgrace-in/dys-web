@@ -60,10 +60,10 @@ def send_mail(receiver_address, name, id):
     session.quit()
     print('Mail Sent')
 
-def sheet_updation(hash, name, age, mail_id, phone_num, occupation, qualification, order_id):
+def sheet_updation(hash, name, age, mail_id, phone_num, lang, occupation, qualification, order_id):
     client = gspread.authorize(credentials)
     sheet = client.open("online").sheet1
-    sheet.append_row([hash, name, age, mail_id, phone_num, occupation, qualification, order_id])
+    sheet.append_row([hash, name, age, mail_id, phone_num, lang, occupation, qualification, order_id])
     print("Sheet Updated")
 
 @csrf_exempt
@@ -75,6 +75,7 @@ def verify_payment(request):
 
         client = razorpay.Client(
             auth=(live, secret))
+
         params_dict = {
             'razorpay_order_id': razorpay_order_id,
             'razorpay_payment_id': razorpay_payment_id,
@@ -85,7 +86,7 @@ def verify_payment(request):
 
             mdl = models.users_data.objects.create(id=str(uuid.uuid1()).replace('-', ''),
                                                    name=request.POST['name'], age=request.POST['age'], mail_id=request.POST['mail_id'], phone_num=request.POST[
-                'phone_num'], occupation=request.POST['occupation'], qualification=request.POST['qualifications'], razorpay_order_id=razorpay_order_id,
+                'phone_num'], occupation=request.POST['occupation'], qualification=request.POST['qualifications'], lang=request.POST['lang'], razorpay_order_id=razorpay_order_id,
                 razorpay_payment_id=razorpay_payment_id, razorpay_signature=razorpay_signature)
 
             thread = Thread(target=send_mail, args=(
@@ -93,7 +94,7 @@ def verify_payment(request):
             thread.start()
 
             thread1 = Thread(target=sheet_updation, args=(mdl.id, request.POST['name'], request.POST['age'], request.POST['mail_id'],
-                                                          request.POST['phone_num'], request.POST['occupation'], request.POST['qualifications'], razorpay_order_id))
+                                                          request.POST['phone_num'], request.POST['lang'], request.POST['occupation'], request.POST['qualifications'], razorpay_order_id))
             thread1.start()
 
             context = {
@@ -118,6 +119,7 @@ def create_an_order(request):
         fees = 50
         client = razorpay.Client(
             auth=(live, secret))
+
         order_currency = 'INR'
         order_receipt = 'ord_rcpt'+str(random.randint(0, 100000))
         c = client.order.create(dict(amount=int(str(fees)+"00"),
