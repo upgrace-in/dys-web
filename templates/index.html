@@ -1009,13 +1009,7 @@
         <div class="eael-reading-progress-fill"></div>
     </div>
 </div>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    let live = "rzp_live_LykfrqrRQz1DIi"
-    let secret = "sRobucivMXuz4rxuia3KzIXX"
-    let test = "rzp_test_IyvQ5bI5rXkMyT"
-    let test_secret = "Xt3HNwMnjP3hlAEUMHiTsMjK"
-
     var contest_ids = [];
     var contest_fees = [];
     var fee = 0;
@@ -1043,42 +1037,10 @@
         else {
             $('.overlay1').show();
             $('.spin').show();
-            $.ajax({
-                url: "{% url 'create_new_order' %}",
-                method: 'POST',
-                data: {
-                    'csrfmiddlewaretoken': csrf
-                },
-                success: function (data) {
-                    var order = data['order'];
-                    var options = {
-                        "key": live,
-                        "amount": order['amount'],
-                        "currency": "INR",
-                        "name": "DYS - Discover Yourself",
-                        "description": "Registration Form - Payment Gateway",
-                        "image": "",
-                        "order_id": order['id'],
-                        "handler": function (response) {
-                            proceed_form(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature)
-                        },
-                        "modal": {
-                            "ondismiss": function () {
-                                location.reload();
-                            }
-                        }
-                    };
-                    var rzp1 = new Razorpay(options);
-                    rzp1.open();
-                },
-                error: function () {
-                    alert("Something goes wrong");
-                }
-            });
-
+            proceed_form()
         }
     };
-    function proceed_form(pay_id, order_id, signature) {
+    function proceed_form() {
         $.ajax({
             method: 'POST',
             url: "{% url 'verify_payment' %}",
@@ -1090,16 +1052,16 @@
                 occupation: $('#occupation').val(),
                 qualifications: $('#qualifications').val(),
                 lang: lang,
-                razorpay_payment_id: pay_id,
-                razorpay_order_id: order_id,
-                razorpay_signature: signature
+                razorpay_payment_id: 'pay_id',
+                razorpay_order_id: 'order_id',
+                razorpay_signature: 'signature'
             },
             success: function (data) {
                 if (data['result'] == 'success') {
-                    alert("Successfully Registered. You'll get one mail from us soon.");
+                    alert("Successfully Registered !!!");
                     location.reload();
                 } else if ((data['result'] == 'error') || (data['result'] == 'failed')) {
-                    alert("Some unknown error has occured. Please contact us if your money has been deducted.")
+                    alert("Some unknown error has occured !!!")
                 }
                 else {
                     console.log("Error " + data);
